@@ -1,7 +1,10 @@
 using Auctions.Data;
 using Auctions.Data.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IListingsService, ListingsService>();
+builder.Services.AddScoped<IBidsService, BidsService>();
+builder.Services.AddScoped<ICommentsService, CommentsService>();
+
 
 var app = builder.Build();
 
@@ -33,6 +39,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 
 app.UseRouting();
 

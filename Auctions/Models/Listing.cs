@@ -20,7 +20,6 @@ namespace Auctions.Models
         public IdentityUser? User { get; set; }
 
         public List<Bid>? Bids { get; set; }
-
         public List<Comment>? Comments { get; set; }
     }
 }
