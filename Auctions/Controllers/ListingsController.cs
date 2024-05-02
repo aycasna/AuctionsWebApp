@@ -9,6 +9,8 @@ using Auctions.Data;
 using Auctions.Models;
 using Auctions.Data.Services;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace Auctions.Controllers
 {
@@ -46,6 +48,8 @@ namespace Auctions.Controllers
             var applicationDbContext = _listingsService.GetAll();
             int pageSize = 3;
 
+            applicationDbContext = applicationDbContext.Where(l => l.IsSold == false);
+
             return View("Index", await PaginatedList<Listing>.CreateAsync(applicationDbContext.Where(l => l.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking(), pageNumber ?? 1, pageSize));
         }
         public async Task<IActionResult> MyBids(int? pageNumber)
@@ -55,6 +59,70 @@ namespace Auctions.Controllers
 
             return View(await PaginatedList<Bid>.CreateAsync(applicationDbContext.Where(l => l.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
+        public async Task<IActionResult> ListingsSold(int? pageNumber)
+        {
+            var applicationDbContext = _listingsService.GetAll();
+            int pageSize = 3;
+            
+            applicationDbContext = applicationDbContext.Where(l => l.IsSold == true);
+            
+
+            return View("ListingsSold", await PaginatedList<Listing>.CreateAsync(applicationDbContext.Where(l => l.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking(), pageNumber ?? 1, pageSize));
+        }
+
+        public async Task<IActionResult> ListingsWon(int? pageNumber)
+        {
+            int pageSize = 3;
+
+            var applicationDbContext = _bidsService.GetAll();
+            //applicationDbContext.Include(l => l.Listing).ThenInclude(l => l.IsSold == true);
+            return View(await PaginatedList<Bid>.CreateAsync(applicationDbContext.Where(l => l.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking(), pageNumber ?? 1, pageSize));
+            
+
+
+        //var applicationDbContext0 = _listingsService.GetAll();
+        //applicationDbContext0 = applicationDbContext0.Where(l => l.IsSold == true);
+        //if (applicationDbContext0 != null)
+        //{
+        //    var applicationDbContext = _bidsService.GetAll();
+        //    int pageSize = 3;
+
+
+        //    return View(await PaginatedList<Bid>.CreateAsync(applicationDbContext.Where(l => l.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking(), pageNumber ?? 1, pageSize));
+
+        //}
+
+        //return View();
+
+
+        //applicationDbContext = applicationDbContext.Include(l => l.Listing).ThenInclude(l => l.IsSold);
+
+
+        //return View(await PaginatedList<Bid>.CreateAsync(applicationDbContext.Where(l => l.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking(), pageNumber ?? 1, pageSize));
+
+        //var applicationDbContext = _listingsService.GetAll();
+        //applicationDbContext = applicationDbContext.Where(l => l.IsSold == true);
+        //int listingId = 
+
+        //var applicationDbContext = _bidsService.GetAll();
+
+        //int pageSize = 3;
+        // this now shows all the bids that the current user has made. it should only show the bids that current user has WON.
+
+
+
+
+        //var id = User.FindFirstValue(ClaimTypes.NameIdentifier); //current user id 
+        //// i need listing id not user id!!!!!!!!!
+        //var listing = await _listingsService.GetById(int.Parse(id)); //current user's listing
+        //if (listing.IsSold == true)
+        //{
+        //    return View(await PaginatedList<Bid>.CreateAsync(applicationDbContext.Where(l => l.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking(), pageNumber ?? 1, pageSize));
+        //}
+        ////applicationDbContext = applicationDbContext.Where(listing => listing.IsSold == true);
+        //return View();
+    }
 
         // GET: Listings/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -119,6 +187,7 @@ namespace Auctions.Controllers
             }
             var listing = await _listingsService.GetById(bid.ListingId);
             listing.Price = bid.Price;
+
             await _listingsService.SaveChanges();
 
             return View("Details", listing);
@@ -127,6 +196,7 @@ namespace Auctions.Controllers
         {
             var listing = await _listingsService.GetById(id);
             listing.IsSold = true;
+            
             await _listingsService.SaveChanges();
             return View("Details", listing);
         }

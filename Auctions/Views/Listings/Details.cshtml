@@ -39,7 +39,8 @@
         </div>
         <div class="col col-xs-6 col-lg-7">
             <div>@Model.Description</div>
-            @if (User.Identity.IsAuthenticated)
+            <!--Bidding-->
+            @if (User.Identity.IsAuthenticated && Model.IsSold == false && userManager.GetUserId(User) != Model.User.Id)
             {
                 <form asp-action="AddBid" method="post">
                     <div>
@@ -88,8 +89,8 @@
 </div>
 
 <br>
-
-@if (User.Identity.IsAuthenticated)
+<!--Commments-->
+@if (User.Identity.IsAuthenticated && Model.IsSold == false)
 {
     <div class="container">
         <form asp-action="AddComment" method="post">
@@ -112,6 +113,7 @@ else
 <br>
 <div class="container">
     <h6>Comments</h6>
+
     @foreach (var comment in Model.Comments)
     {
         <div style="border:1px solid lightgray; margin: 10px; padding: 10px; border-radius: 10px; width: 40%;">
