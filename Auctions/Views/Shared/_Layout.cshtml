@@ -28,8 +28,16 @@
                                 <a class="nav-link" asp-area="" asp-controller="Listings" asp-action="MyListings"> <i class="fa fa-solid fa-newspaper"></i> My Listings</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Listings" asp-action="MyBids"> <i class="fa fa-solid fa-sack-dollar"></i> My Bids</a>
+                                <a class="nav-link" asp-area="" asp-controller="Listings" asp-action="MyBids"> <i class="fa fa-solid fa-coins"></i> My Bids</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Listings" asp-action="ListingsSold"> <i class="fa fa-solid fa-money-bill"></i> Listings Sold</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Listings" asp-action="ListingsWon"> <i class="fa fa-solid fa-ranking-star"></i> Listings Won</a>
+                            </li>
+                            
+                            
                         }
                         <li class="nav-item" style="margin: auto;">
                             <form asp-controller="Listings" asp-action="Index" method="get">
@@ -51,7 +59,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - Auctions - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - Auctions Website - Ayça Sena Koç
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
